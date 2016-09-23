@@ -27,6 +27,17 @@ class Main extends PluginBase implements Listener{
 		@mkdir($this->getDataFolder());
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false]);
 		$this->level = $this->config->get(self::WORLD);
+		/*$this->teams["Test"] = new TeamManager("Test");
+		foreach($this->teams["Test"]->getTeammates() as $name){
+			$this->getServer()->getLogger()->info(self::PREFIX."Test 1: ".$name);
+		}
+		$this->teams["Test"]->addPlayer("Savion");
+		$this->teams["Test"]->addPlayer("Luego");
+		foreach($this->teams["Test"]->getTeammates() as $name){
+			$this->getServer()->getLogger()->info(self::PREFIX."Test 2: ".$name);
+		}
+		$this->teams["Test"]->setLeader("Savion");
+		$this->getServer()->getLogger()->info("Test 3: ".$this->teams["Test"]->getLeader());*/
 	}
 
 	public function getTeam(Player $player){
@@ -34,7 +45,7 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function setTeam(Player $player, string $team){
-		$this->playerTeam[$player->getName()] = $this->teams[$team];
+		$this->playerTeam[$player->getName()] = $this->teams[$team]; 
 		$player->sendMessage(self::PREFIX."You are now on team: ".$team);
 	}
 
