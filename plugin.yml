@@ -1,10 +1,5 @@
-name: UHCCore
+name: CoreUHC
 main: CoreUHC\Main
-api: 1.13.0
-version: 0.1
-author: OpenBuild Dev Team
-commands:
- uhc:
-  description: A simple UHC Core Plugin for ImagicalMine
-  permission: uhc.cmd
-  usage: /uhc help
+version: 1.0
+api: [1.12.0]
+author: SavionLegendZzz
