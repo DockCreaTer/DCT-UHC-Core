@@ -1,5 +1,5 @@
 name: UHCCore
-main: FRISCOWZ\Main
+main: CoreUHC\Main
 api: 1.13.0
 version: 0.1
 author: OpenBuild Dev Team
