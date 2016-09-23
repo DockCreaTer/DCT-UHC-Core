@@ -20,6 +20,8 @@ class Main extends PluginBase implements Listener{
 
 	public $teams = [];
 
+	public $playerTeam = [];
+
 	public function onEnable(){
 		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
 		@mkdir($this->getDataFolder());
@@ -28,11 +30,12 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function getTeam(Player $player){
-		// TODO: get a players team
+		return $this->playerTeam[$player->getName()];
 	}
 
 	public function setTeam(Player $player, string $team, array $teammates){
-		$this->teams[$team] = new TeamManager($team, $teammates);
+		$this->teams[$team] = new TeamManager($team, $teammates)->addPlayer($player);
+		$this->playerTeam[$player->getName()] = $this->teams[$team];
 	}
 
 	public function teamsEnabled(){
