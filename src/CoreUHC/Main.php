@@ -50,7 +50,7 @@ class Main extends PluginBase implements Listener{
 		if(count($this->commands) === 0){
 			return;
 		}
-		$this->getServer()->getCommandMap()->registerAll("kitpvp", $this->commands);
+		$this->getServer()->getCommandMap()->registerAll("uhc", $this->commands);
 	}
 
 	public function getTeam(Player $player){
