@@ -14,6 +14,7 @@ use pocketmine\level\Position;
 use pockemtine\Player;
 
 use CoreUHC\events\TeamManager;
+use CoreUHC\commands\CoreUHCTeamCommand;
 
 class Main extends PluginBase implements Listener{
 
@@ -23,6 +24,8 @@ class Main extends PluginBase implements Listener{
 	public $teams = [];
 
 	public $playerTeam = [];
+
+	public $teamCount = 0;
 
 	public function onEnable(){
 		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
@@ -39,6 +42,15 @@ class Main extends PluginBase implements Listener{
 			$this->getServer()->getLogger()->info(self::PREFIX."Test 2: ".$name);
 		}
 		$this->getServer()->getLogger()->info("Test 3: ".$this->teams["Test"]->getLeader());*/
+		$this->commands = [new CoreUHCTeamCommand($this)];
+		$this->registerCommands();
+	}
+
+	public function registerCommands(){
+		if(count($this->commands) === 0){
+			return;
+		}
+		$this->getServer()->getCommandMap()->registerAll("kitpvp", $this->commands);
 	}
 
 	public function getTeam(Player $player){
@@ -72,6 +84,7 @@ class Main extends PluginBase implements Listener{
 
 	public function setWorld(){
 		if($this->getServer()->isLevelGenerated($this->level)){
+			$this->getServer()->loadLevel($this->level);
 			$this->level = $this->getServer()->getLevelByName($this->level);
 		}else{
 			$this->level = null;
@@ -83,6 +96,14 @@ class Main extends PluginBase implements Listener{
 		$player->setHealth($player->getMaxHealth());
 		$player->setFood(20);
 		$player->removeAllEffects();
+	}
+
+	public function removeTeam(string $team){
+		foreach($this->teams[$team]->getTeammates() as $tm){
+			$player = $this->getServer()->getPlayer($tm);
+			unset($this->playerTeam[$player->getName()]);
+		}
+		unset($this->teams[$team]);
 	}
 
 	public function startMatch(){
