@@ -11,6 +11,8 @@ use pocketmine\utils\Config;
 
 use pockemtine\Player;
 
+use CoreUHC\events\TeamManager;
+
 class Main extends PluginBase implements Listener{
 
 	const PREFIX = TF::GRAY."[".TF::AQUA."CoreUHC".TF::GRAY."]".TF::WHITE;
@@ -26,15 +28,11 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function getTeam(Player $player){
-		if($this->config->get("Team-enabled") === true){
-			return $this->teams[$player->getName()]["Team"];
-		}else{
-			return null;
-		}
+		// TODO: get a players team
 	}
 
 	public function setTeam(Player $player, string $team, array $teammates){
-		$this->teams[$player->getName()] = ["Team" => $team, "Teammates" => $teammates];
+		$this->teams[$team] = new TeamManager($team, $teammates);
 	}
 
 	public function teamsEnabled(){
