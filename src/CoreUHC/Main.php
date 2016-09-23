@@ -9,6 +9,8 @@ use pocketmine\event\Listener;
 use pocketmine\utils\TextFormat as TF;
 use pocketmine\utils\Config;
 
+use pocketmine\level\Position;
+
 use pockemtine\Player;
 
 use CoreUHC\events\TeamManager;
@@ -27,8 +29,8 @@ class Main extends PluginBase implements Listener{
 		@mkdir($this->getDataFolder());
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false]);
 		$this->level = $this->config->get(self::WORLD);
-		/*$this->teams["Test"] = new TeamManager("Test");
-		foreach($this->teams["Test"]->getTeammates() as $name){
+		$this->teams["Test"] = new TeamManager("Test");
+		/*foreach($this->teams["Test"]->getTeammates() as $name){
 			$this->getServer()->getLogger()->info(self::PREFIX."Test 1: ".$name);
 		}
 		$this->teams["Test"]->addPlayer("Savion");
@@ -36,7 +38,6 @@ class Main extends PluginBase implements Listener{
 		foreach($this->teams["Test"]->getTeammates() as $name){
 			$this->getServer()->getLogger()->info(self::PREFIX."Test 2: ".$name);
 		}
-		$this->teams["Test"]->setLeader("Savion");
 		$this->getServer()->getLogger()->info("Test 3: ".$this->teams["Test"]->getLeader());*/
 	}
 
@@ -77,7 +78,16 @@ class Main extends PluginBase implements Listener{
 		}
 	}
 
+	public function heal(Player $player){
+		$player->setMaxHealth($player->getMaxHealth());
+		$player->setHealth($player->getMaxHealth());
+		$player->setFood(20);
+		$player->removeAllEffects();
+	}
+
 	public function startMatch(){
+		$randx = mt_rand(0, 255);
+		$randz = mt_rand(0, 255);
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->level === null){
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
@@ -85,6 +95,14 @@ class Main extends PluginBase implements Listener{
 				return;
 			}
 			$p->teleport($this->level->getSafeSpawn());
+			if($this->teamsEnabled()){
+				$leader = $this->playerTeam[$p->getName()]->getLeader();
+				$leader->teleport(new Position($randz, 60, $randx));
+	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
+					$tm->teleport($leader);
+				}
+			}
 		}
+		$this->heal($p);
 	}	
 }

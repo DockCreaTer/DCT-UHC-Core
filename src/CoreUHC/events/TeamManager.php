@@ -25,7 +25,7 @@ class TeamManager{
 	}
 
 	public function setLeader(Player $player){
-		$this->leader = $player->getName();
+		$this->leader = $player;
 	}
 
 	public function getLeader(){
