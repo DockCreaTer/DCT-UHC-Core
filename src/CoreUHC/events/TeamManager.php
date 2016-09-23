@@ -6,9 +6,10 @@ use pocketmine\Player;
 
 class TeamManager{
 
-	public function __construct(string $team, array $teammates){
+	public function __construct(string $team){
 		$this->team = $team;
-		$this->teammates = $teammates;
+		$this->teammates = [];
+		$this->leader = null;
 	}
 
 	public function getName(){
@@ -21,5 +22,13 @@ class TeamManager{
 
 	public function addPlayer(Player $player){
 		array_push($this->teammates, $player->getName());
+	}
+
+	public function setLeader(Player $player){
+		$this->leader = $player->getName();
+	}
+
+	public function getLeader(){
+		return $this->leader;
 	}
 }

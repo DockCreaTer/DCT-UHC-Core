@@ -33,9 +33,21 @@ class Main extends PluginBase implements Listener{
 		return $this->playerTeam[$player->getName()];
 	}
 
-	public function setTeam(Player $player, string $team, array $teammates){
-		$this->teams[$team] = new TeamManager($team, $teammates)->addPlayer($player);
+	public function setTeam(Player $player, string $team){
 		$this->playerTeam[$player->getName()] = $this->teams[$team];
+		$player->sendMessage(self::PREFIX."You are now on team: ".$team);
+	}
+
+	public function createTeam(Player $creator, string $team){
+		if(isset($this->teams[$team])){
+			$creator->sendMessage(self::PREFIX."This is already a team!");
+			return;
+		}
+		$this->teams[$team] = new TeamManager($team);
+		$this->teams[$team]->addPlayer($creator);
+		$this->teams[$team]->setLeader($creator);
+		$this->playerTeam[$creator->getName()] = $this->teams[$team];
+		$creator->sendMessage(self::PREFIX."Created team: ".$team);
 	}
 
 	public function teamsEnabled(){
