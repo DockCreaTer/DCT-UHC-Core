@@ -31,7 +31,7 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 	
 	public function execute(CommandSender $sender, $commandLabel, array $args){
 		$count = $this->getPlugin()->teamCount;
-		if(!$this->getPlugin()->teamEnabled()){
+		if(!$this->getPlugin()->teamsEnabled()){
 			$sender->sendMessage(Main::PREFIX."Teams are not enabled!");
 			return;
 		}
@@ -54,6 +54,8 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 					$player->sendMessage(Main::PREFIX.$sender->getName()." sent you a team request please do /team accept to accept!");
 					$sender->sendMessage(Main::PREFIX."Sent a team request to ".$sender->getName()."!");
 					$this->getPlugin()->handleRequest($sender, $player);
+				}else{
+					$sender->sendMessage(Main::PREFIX."Please specify a player!");
 				}
 			}else{
 				$sender->sendMessage(Main::PREFIX."Please join/create a team to use this command!");
@@ -67,6 +69,8 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 				$this->getTeam($requester)->addPlayer($sender);
 				$this->getPlugin()->closeRequest($sender);
 				// teammate message?
+			}else{
+				$sender->sendMessage(Main::PREFIX."You don't have any team request!");
 			}
 		}
 	}
