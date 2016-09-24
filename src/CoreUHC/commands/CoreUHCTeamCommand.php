@@ -26,7 +26,7 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 	}
 
 	public function getServer(){
-		return $this->server;
+		return $this->server; 
 	}
 	
 	public function execute(CommandSender $sender, $commandLabel, array $args){
