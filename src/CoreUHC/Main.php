@@ -27,6 +27,10 @@ class Main extends PluginBase implements Listener{
 
 	public $teamCount = 0;
 
+	public $requester = [];
+
+	public $waiting = [];
+
 	public function onEnable(){
 		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
 		@mkdir($this->getDataFolder());
@@ -55,6 +59,25 @@ class Main extends PluginBase implements Listener{
 
 	public function getTeam(Player $player){
 		return $this->playerTeam[$player->getName()];
+	}
+
+	public function isInTeam(Player $player){
+		if(isset($this->playerTeam[$player->getName()])){
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+	public function closeRequest(Player $player){
+		unset($this->requester[$player->getName()]);
+		unset($this->waiting[$player->getName()]);
+	}
+
+	public function handleRequest(Player $requester, Player $player){
+		$this->closeRequest($player);
+		$this->requester[$player->getName()] = $requester->getName();
+		$this->waiting[$player->getName()] = true;
 	}
 
 	public function setTeam(Player $player, string $team){
