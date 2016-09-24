@@ -14,6 +14,7 @@ use pocketmine\level\Position;
 use pockemtine\Player;
 
 use CoreUHC\events\TeamManager;
+use CoreUHC\events\EventsListener;
 use CoreUHC\commands\CoreUHCTeamCommand;
 
 class Main extends PluginBase implements Listener{
@@ -48,6 +49,7 @@ class Main extends PluginBase implements Listener{
 		$this->getServer()->getLogger()->info("Test 3: ".$this->teams["Test"]->getLeader());*/
 		$this->commands = [new CoreUHCTeamCommand($this)];
 		$this->registerCommands();
+		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
 	}
 
 	public function registerCommands(){
