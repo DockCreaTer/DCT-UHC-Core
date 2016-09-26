@@ -135,6 +135,7 @@ class Main extends PluginBase implements Listener{
 
 	public function newMatch($teams = false, array $players){
 		$this->match = new MatchManager($teams, $players);// Soon: scenarios!
+		$this->getLogger()->info("[Debug]Created match: ".$this->match->getId()."!");
 	}
 
 	public function startMatch(){

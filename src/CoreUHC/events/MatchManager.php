@@ -9,6 +9,11 @@ class MatchManager{
 	public function __construct(bool $teams, array $players){
 		$this->teams = $teams;
 		$this->players = $players;
+		$this->id = rand(10,60);
+	}
+
+	public function getId(){
+		return $this->id;
 	}
 
 	public function getPlayers(){
