@@ -21,7 +21,7 @@ class TeamManager{
 	}
 
 	public function removePlayer(Player $player){
-		unset($this->players[$player->getName()]);
+		unset($this->teammates[$player->getName()]);
 	}
 
 	public function addPlayer(Player $player){
