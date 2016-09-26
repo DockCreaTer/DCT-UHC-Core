@@ -20,8 +20,12 @@ class TeamManager{
 		return $this->teammates;
 	}
 
+	public function removePlayer(Player $player){
+		unset($this->players[$player->getName()]);
+	}
+
 	public function addPlayer(Player $player){
-		array_push($this->teammates, $player->getName());
+		$this->teammates[$player->getName()] = $player->getName();
 	}
 
 	public function setLeader(Player $player){

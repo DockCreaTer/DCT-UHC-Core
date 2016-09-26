@@ -15,6 +15,7 @@ use pockemtine\Player;
 
 use CoreUHC\events\TeamManager;
 use CoreUHC\events\EventsListener;
+use CoreUHC\events\MatchManager;
 use CoreUHC\commands\CoreUHCTeamCommand;
 
 class Main extends PluginBase implements Listener{
@@ -37,6 +38,7 @@ class Main extends PluginBase implements Listener{
 		@mkdir($this->getDataFolder());
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false]);
 		$this->level = $this->config->get(self::WORLD);
+		$this->match = null;
 		$this->teams["Test"] = new TeamManager("Test");
 		/*foreach($this->teams["Test"]->getTeammates() as $name){
 			$this->getServer()->getLogger()->info(self::PREFIX."Test 1: ".$name);
@@ -131,9 +133,14 @@ class Main extends PluginBase implements Listener{
 		unset($this->teams[$team]);
 	}
 
+	public function newMatch($teams = false, array $players){
+		$this->match = new MatchManager($teams, $players);// Soon: scenarios!
+	}
+
 	public function startMatch(){
 		$randx = mt_rand(0, 255);
 		$randz = mt_rand(0, 255);
+		$teams = false;
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->level === null){
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
@@ -147,8 +154,10 @@ class Main extends PluginBase implements Listener{
 	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
 					$tm->teleport($leader);
 				}
+				$teams = true;
 			}
 		}
+		$this->newMatch($teams, $this->getServer()->getOnlinePlayers());
 		$this->heal($p);
 	}	
 }
