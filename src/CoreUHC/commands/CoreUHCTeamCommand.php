@@ -70,8 +70,8 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 				$requester = $this->getServer()->getPlayer($this->getPlugin()->requester[$sender->getName()]);
 				$sender->sendMessage(Main::PREFIX."Accepted ".$requester->getName()."'s team request!");
 				$requester->sendMessage(Main::PREFIX.$sender->getName()." joined your team!");
-				$this->getPlugin()->playerTeam[$sender->getName()] = $this->teams[$this->getPlugin()->getTeam($requester)->getName()];
-				$this->getTeam($requester)->addPlayer($sender);
+				$this->getPlugin()->playerTeam[$sender->getName()] = $this->getPlugin()->teams[$this->getPlugin()->getTeam($requester)->getName()];
+				$this->getPlugin()->getTeam($requester)->addPlayer($sender);
 				$this->getPlugin()->closeRequest($sender);
 				// teammate message?
 			}else{

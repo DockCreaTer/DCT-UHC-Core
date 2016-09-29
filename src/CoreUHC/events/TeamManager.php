@@ -35,4 +35,8 @@ class TeamManager{
 	public function getLeader(){
 		return $this->leader;
 	}
+
+	public function getPlayerCount(){
+		return count($this->teammates);
+	}
 }

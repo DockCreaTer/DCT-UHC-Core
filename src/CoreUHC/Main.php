@@ -11,12 +11,13 @@ use pocketmine\utils\Config;
 
 use pocketmine\level\Position;
 
-use pockemtine\Player;
+use pocketmine\Player;
 
 use CoreUHC\events\TeamManager;
 use CoreUHC\events\EventsListener;
 use CoreUHC\events\MatchManager;
 use CoreUHC\commands\CoreUHCTeamCommand;
+use CoreUHC\commands\CoreUHCMainCommand;
 
 class Main extends PluginBase implements Listener{
 
@@ -27,7 +28,7 @@ class Main extends PluginBase implements Listener{
 
 	public $playerTeam = [];
 
-	public $teamCount = 0;
+	public $teamCount = 1;
 
 	public $requester = [];
 
@@ -40,7 +41,7 @@ class Main extends PluginBase implements Listener{
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false, "team-size" => 2]);
 		$this->level = $this->config->get(self::WORLD);
 		$this->match = null;
-		$this->commands = [new CoreUHCTeamCommand($this)];
+		$this->commands = [new CoreUHCTeamCommand($this), new CoreUHCMainCommand($this)];
 		$this->registerCommands();
 		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
 		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");		
