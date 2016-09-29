@@ -122,9 +122,11 @@ class Main extends PluginBase implements Listener{
 	public function removeTeam(string $team){
 		foreach($this->teams[$team]->getTeammates() as $tm){
 			$player = $this->getServer()->getPlayer($tm);
+			$player->sendMessage(Main::PREFIX."Team has been disbanded by ".$this->teams[$team]->getLeader()->getName()."!");
 			unset($this->playerTeam[$player->getName()]);
 		}
 		unset($this->teams[$team]);
+		$this->teamCount--;
 	}
 
 	public function newMatch($teams = false, $teamSize = 0, array $players){
@@ -136,6 +138,7 @@ class Main extends PluginBase implements Listener{
 		$randx = mt_rand(0, 255);
 		$randz = mt_rand(0, 255);
 		$teams = false;
+		$this->setWorld();
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->level === null){
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
@@ -148,8 +151,9 @@ class Main extends PluginBase implements Listener{
 					$p->close("",Main::PREFIX."You were not on a team!");
 				}
 				$leader = $this->playerTeam[$p->getName()]->getLeader();
-				$leader->teleport(new Position($randz, 60, $randx));
+				$leader->teleport(new Position($randz, 100, $randx));
 	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
+	 				$tm = $this->getServer()->getPlayer($tm);
 					$tm->teleport($leader);
 				}
 				$teams = true;

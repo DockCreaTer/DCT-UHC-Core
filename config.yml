@@ -1,4 +1,5 @@
 ---
 UHC-world: UHC
-Team-enabled: false
+Team-enabled: true
+team-size: 2
 ...

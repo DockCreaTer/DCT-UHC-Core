@@ -58,6 +58,7 @@ class EventsListener implements Listener{
 	public function onDeath(PlayerDeathEvent $ev){
 		$player = $ev->getEntity();
 		$cause = $player->getLastDamageCause();
+		$ev->setDeathMessage(null);
 		switch($cause === null ? EntityDamageEvent::CAUSE_CUSTOM : $cause->getCause()){
 				case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
 					if($cause instanceof EntityDamageByEntityEvent){
@@ -87,7 +88,7 @@ class EventsListener implements Listener{
 					}
 					break;
 				case EntityDamageEvent::CAUSE_SUICIDE:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");;
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed their self!");;
 					break;
 				case EntityDamageEvent::CAUSE_VOID:
 					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world!");
@@ -95,11 +96,11 @@ class EventsListener implements Listener{
 				case EntityDamageEvent::CAUSE_FALL:
 					if($cause instanceof EntityDamageEvent){
 						if($cause->getFinalDamage() > 2){
-							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." got their ankle broken!");
 							break;
 						}
 					}
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." got their ankle broken!");
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
 					break;
 
 				case EntityDamageEvent::CAUSE_SUFFOCATION:

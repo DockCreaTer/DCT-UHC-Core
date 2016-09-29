@@ -30,6 +30,8 @@ class CoreUHCMainCommand extends CoreUHCCommandListener{
 	}
 	
 	public function execute(CommandSender $sender, $commandLabel, array $args){
-
+		if(isset($args[0]) && strtolower($args[0]) === "start"){
+			$this->getPlugin()->startMatch();
+		}
 	}
 }

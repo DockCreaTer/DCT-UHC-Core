@@ -35,13 +35,21 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 			$sender->sendMessage(Main::PREFIX."Teams are not enabled!");
 			return;
 		}
+		if(isset($args[0]) && strtolower($args[0]) === "disband"){
+			if($this->getPlugin()->isInTeam($sender) && $this->getPlugin()->getTeam($sender)->getLeader()->getName() === $sender->getName()){
+				$sender->sendMessage(Main::PREFIX."Team disbaned!");
+				$this->getPlugin()->removeTeam($this->getPlugin()->getTeam($sender)->getName());
+			}else{
+				$sender->sendMessage(Main::PREFIX."You don't own a team!");
+			}
+		}
 		if(isset($args[0]) && strtolower($args[0]) === "create"){
 			if(isset($this->getPlugin()->playerTeam[$sender->getName()])){
 				$sender->sendMessage(Main::PREFIX."You already are in a team/own a team!");
 				return;
 			}
 			$this->getPlugin()->createTeam($sender, "Team".$count);
-			$count++;
+			$this->getPlugin()->teamCount++;
 		}
 		if(isset($args[0]) && strtolower($args[0]) === "invite"){
 			if($this->getPlugin()->isInTeam($sender) && $this->getPlugin()->getTeam($sender)->getLeader()->getName() === $sender->getName()){
