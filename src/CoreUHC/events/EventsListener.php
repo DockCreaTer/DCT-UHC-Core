@@ -66,7 +66,7 @@ class EventsListener implements Listener{
 						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was killed by ".$e->getName()."!");
 						break;
 					}elseif($e instanceof Living){
-						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was killed by "$e->getNameTag()."!");
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was killed by ".$e->getNameTag()."!");
 						break;
 					}else{
 						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
