@@ -54,4 +54,104 @@ class EventsListener implements Listener{
 			}
 		}
 	}
+
+	public function onDeath(PlayerDeathEvent $ev){
+		$player = $ev->getEntity();
+		$cause = $player->getLastDamageCause();
+		switch($cause === null ? EntityDamageEvent::CAUSE_CUSTOM : $cause->getCause()){
+			case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
+				if($cause instanceof EntityDamageByEntityEvent){
+					$e = $cause->getDamager();
+					if($e instanceof Player){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was killed by ".$e->getName()."!");
+						break;
+					}elseif($e instanceof Living){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was killed by "$e->getNameTag()."!");
+						break;
+					}else{
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+					}
+				}
+				break;
+			case EntityDamageEvent::CAUSE_PROJECTILE:
+				if($cause instanceof EntityDamageByEntityEvent){
+					$e = $cause->getDamager();
+					if($e instanceof Player){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was shot by ".$e->getName()."!");
+					}elseif($e instanceof Living){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to an arrow!");
+						break;
+					}else{
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to an arrow!");
+					}
+				}
+				break;
+			case EntityDamageEvent::CAUSE_SUICIDE:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");;
+				break;
+			case EntityDamageEvent::CAUSE_VOID:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world!");
+				break;
+			case EntityDamageEvent::CAUSE_FALL:
+				if($cause instanceof EntityDamageEvent){
+					if($cause->getFinalDamage() > 2){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+
+						break;
+					}
+				}
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." got their ankle broken!");
+				break;
+
+			case EntityDamageEvent::CAUSE_SUFFOCATION:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died because they can't phase through blocks!");
+				break;
+
+			case EntityDamageEvent::CAUSE_LAVA:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to LAVA!");
+				break;
+
+			case EntityDamageEvent::CAUSE_FIRE:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to fire!");
+				break;
+
+			case EntityDamageEvent::CAUSE_FIRE_TICK:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to fire!");
+				break;
+
+			case EntityDamageEvent::CAUSE_DROWNING:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." couldn't swim, so they died!");
+				break;
+
+			case EntityDamageEvent::CAUSE_CONTACT:
+				if($cause instanceof EntityDamageByBlockEvent){
+					if($cause->getDamager()->getId() === Block::CACTUS){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to cacti!");
+					}
+				}
+				break;
+
+			case EntityDamageEvent::CAUSE_BLOCK_EXPLOSION:
+			case EntityDamageEvent::CAUSE_ENTITY_EXPLOSION:
+				if($cause instanceof EntityDamageByEntityEvent){
+					$e = $cause->getDamager();
+					if($e instanceof Player){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." was blown up by ".$e->getName()."!");
+					}elseif($e instanceof Living){
+						$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." blew up!");
+						break;
+					}
+				}else{
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+				}
+				break;
+
+			case EntityDamageEvent::CAUSE_MAGIC:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+				break;
+
+			case EntityDamageEvent::CAUSE_CUSTOM:
+				$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died!");
+				break;
+	}
 }

@@ -33,25 +33,18 @@ class Main extends PluginBase implements Listener{
 
 	public $waiting = [];
 
+	public $teamLimit = 2;// changeable soon(scenarios)
+
 	public function onEnable(){
-		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
 		@mkdir($this->getDataFolder());
-		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false]);
+		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false, "team-size" => 2]);
 		$this->level = $this->config->get(self::WORLD);
 		$this->match = null;
-		$this->teams["Test"] = new TeamManager("Test");
-		/*foreach($this->teams["Test"]->getTeammates() as $name){
-			$this->getServer()->getLogger()->info(self::PREFIX."Test 1: ".$name);
-		}
-		$this->teams["Test"]->addPlayer("Savion");
-		$this->teams["Test"]->addPlayer("Luego");
-		foreach($this->teams["Test"]->getTeammates() as $name){
-			$this->getServer()->getLogger()->info(self::PREFIX."Test 2: ".$name);
-		}
-		$this->getServer()->getLogger()->info("Test 3: ".$this->teams["Test"]->getLeader());*/
 		$this->commands = [new CoreUHCTeamCommand($this)];
 		$this->registerCommands();
 		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
+		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");		
+		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
 	}
 
 	public function registerCommands(){
@@ -133,8 +126,8 @@ class Main extends PluginBase implements Listener{
 		unset($this->teams[$team]);
 	}
 
-	public function newMatch($teams = false, array $players){
-		$this->match = new MatchManager($teams, $players);// Soon: scenarios!
+	public function newMatch($teams = false, $teamSize = 0, array $players){
+		$this->match = new MatchManager($this, $teams, $teamSize, $players);// Soon: scenarios!
 		$this->getLogger()->info("[Debug]Created match: ".$this->match->getId()."!");
 	}
 
@@ -150,6 +143,9 @@ class Main extends PluginBase implements Listener{
 			}
 			$p->teleport($this->level->getSafeSpawn());
 			if($this->teamsEnabled()){
+				if(!isset($this->playerTeam[$p->getName()])){
+					$p->close("",Main::PREFIX."You were not on a team!");
+				}
 				$leader = $this->playerTeam[$p->getName()]->getLeader();
 				$leader->teleport(new Position($randz, 60, $randx));
 	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
@@ -158,7 +154,8 @@ class Main extends PluginBase implements Listener{
 				$teams = true;
 			}
 		}
-		$this->newMatch($teams, $this->getServer()->getOnlinePlayers());
+		$teamSize = $this->teamLimit;
+		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers());
 		$this->heal($p);
 	}	
 }

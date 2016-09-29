@@ -45,6 +45,10 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 		}
 		if(isset($args[0]) && strtolower($args[0]) === "invite"){
 			if($this->getPlugin()->isInTeam($sender) && $this->getPlugin()->getTeam($sender)->getLeader()->getName() === $sender->getName()){
+				if(count($this->getPlugin()->getTeam($sender)->getPlayerCount()) === $this->getPlugin()->teamLimit){
+					$sender->sendMessage(Main::PREFIX."You have the max player limit!");	
+					return;
+				}
 				if(isset($args[1])){
 					$player = $this->getServer()->getPlayer($args[1]);
 					if($player === null){
