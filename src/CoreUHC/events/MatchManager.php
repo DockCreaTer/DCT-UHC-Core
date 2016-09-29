@@ -4,12 +4,20 @@ namespace CoreUHC\events;
 
 use pocketmine\Player;
 
+use CoreUHC\Main;
+
 class MatchManager{
 
-	public function __construct(bool $teams, array $players){
+	public function __construct(Main $plugin, bool $teams, int $teamSize, array $players){
+		$this->plugin = $plugin;
 		$this->teams = $teams;
 		$this->players = $players;
 		$this->id = rand(10,60);
+		$this->teamSize = $teamSize;
+	}
+
+	public function getPlugin(){
+		return $this->plugin;
 	}
 
 	public function getId(){
@@ -34,5 +42,9 @@ class MatchManager{
 
 	public function getAlivePlayers(){
 		return count($this->players);
+	}
+
+	public function getTeamSize(){
+		return $this->teamSize;
 	}
 }
