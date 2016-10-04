@@ -21,7 +21,7 @@ use CoreUHC\commands\CoreUHCMainCommand;
 
 class Main extends PluginBase implements Listener{
 
-	const PREFIX = TF::GRAY."[".TF::AQUA."CoreUHC".TF::GRAY."]".TF::WHITE;
+	const PREFIX = TF::GRAY."[".TF::AQUA."CoreUHC".TF::GRAY."]" . TF::WHITE;
 	const WORLD = "UHC-world";
 
 	public $teams = [];
@@ -45,7 +45,7 @@ class Main extends PluginBase implements Listener{
 		$this->registerCommands();
 		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
 		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");		
-		$this->getServer()->getLogger()->info(self::PREFIX."Enabled!");
+		$this->getServer()->getLogger()->info(self::PREFIX."has been Enabled!");
 	}
 
 	public function registerCommands(){
@@ -62,7 +62,7 @@ class Main extends PluginBase implements Listener{
 	public function isInTeam(Player $player){
 		if(isset($this->playerTeam[$player->getName()])){
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
