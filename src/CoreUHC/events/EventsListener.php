@@ -88,10 +88,10 @@ class EventsListener implements Listener{
 					}
 					break;
 				case EntityDamageEvent::CAUSE_SUICIDE:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed their self!");;
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed themselves!");;
 					break;
 				case EntityDamageEvent::CAUSE_VOID:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world!");
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world! ELIMINATED!");
 					break;
 				case EntityDamageEvent::CAUSE_FALL:
 					if($cause instanceof EntityDamageEvent){
