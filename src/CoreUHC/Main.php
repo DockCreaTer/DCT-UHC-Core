@@ -134,6 +134,14 @@ class Main extends PluginBase implements Listener{
 		$this->getLogger()->info("[Debug]Created match: ".$this->match->getId()."!");
 	}
 
+	public function removePlayer(Player $player){
+		//TODO: player kicking, and array management
+	}
+
+	public function updateKills(Player $player){
+		//TODO: kills
+	}
+
 	public function startMatch(){
 		$randx = mt_rand(-255, 255);
 		$randz = mt_rand(-255, 255);
@@ -142,7 +150,6 @@ class Main extends PluginBase implements Listener{
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->level === null){
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
-				$this->setWorld();
 				return;
 			}
 			$p->teleport($this->level->getSafeSpawn());

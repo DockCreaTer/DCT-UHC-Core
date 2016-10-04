@@ -22,6 +22,10 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 
 use pocketmine\item\Item;
 
+use pocketmine\block\Block;
+
+use pocketmine\entity\Living;
+
 use CoreUHC\Main;
 
 use pocketmine\utils\TextFormat as TF;
@@ -59,6 +63,14 @@ class EventsListener implements Listener{
 		$player = $ev->getEntity();
 		$cause = $player->getLastDamageCause();
 		$ev->setDeathMessage(null);
+		if($player instanceof Player){
+			if($ev instanceof EntityDamageByEntityEvent){
+				$this->getPlugin()->removePlayer($player);
+				$this->getPlugin()->updateKills($ev->getDamager());
+			}else{
+				$this->getPlugin()->removePlayer($player);
+			}
+		}
 		switch($cause === null ? EntityDamageEvent::CAUSE_CUSTOM : $cause->getCause()){
 				case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
 					if($cause instanceof EntityDamageByEntityEvent){
