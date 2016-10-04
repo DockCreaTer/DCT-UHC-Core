@@ -33,11 +33,13 @@ class MatchManager{
 	}
 
 	public function removePlayer(Player $player){
-		unset($this->players[$player->getName()]);
+		$key = array_search($player->getName(), $this->players);
+		unset($this->players[$key]);
+		$player->close(" ",Main::PREFIX."You were eliminated!");
 	}
 
 	public function addPlayer(Player $player){
-		$this->players[$player->getName()] = $player->getName();
+		array_push($this->players, $player->getName());
 	}
 
 	public function getAlivePlayers(){

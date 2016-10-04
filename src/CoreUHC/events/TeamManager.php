@@ -21,11 +21,12 @@ class TeamManager{
 	}
 
 	public function removePlayer(Player $player){
-		unset($this->teammates[$player->getName()]);
+		$key = array_search($player->getName(), $this->teammates);
+		unset($this->teammates[$key]);
 	}
 
 	public function addPlayer(Player $player){
-		$this->teammates[$player->getName()] = $player->getName();
+		array_push($this->teammates, $player->getName());
 	}
 
 	public function setLeader(Player $player){

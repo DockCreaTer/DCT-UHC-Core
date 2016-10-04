@@ -26,6 +26,8 @@ class Main extends PluginBase implements Listener{
 
 	public $teams = [];
 
+	public $kills = [];
+
 	public $playerTeam = [];
 
 	public $teamCount = 1;
@@ -135,11 +137,24 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function removePlayer(Player $player){
-		//TODO: player kicking, and array management
+		if($this->match === null) return;
+		if($this->teamsEnabled()){
+			unset($this->playerTeam[$player->getName()]);
+			$this->getTeam($player)->removePlayer($player);
+		}
+		unset($this->kills[$player->getName()]);
+		foreach($this->getServer()->getOnlinePlayers() as $p){
+			$p->sendMessage(Main::PREFIX.$player->getName()." has been eliminated!");
+		}
+		$this->match->removePlayer($player);
+	}
+
+	public function getKills(Player $player){
+		return $this->kills[$player->getName()];
 	}
 
 	public function updateKills(Player $player){
-		//TODO: kills
+		$this->kills[$player->getName()]++;
 	}
 
 	public function startMatch(){
@@ -152,17 +167,14 @@ class Main extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
 				return;
 			}
-			$p->teleport($this->level->getSafeSpawn());
+			$p->setLevel($this->level);
 			if($this->teamsEnabled()){
 				if(!isset($this->playerTeam[$p->getName()])){
-					$p->close("",Main::PREFIX."You were not on a team!");
+					$p->close(" ",Main::PREFIX."You were not on a team!");
 				}
-				if(count($this->getServer()->getOnlinePlayers()) === 0){
-					return;
-				}
-				$leader = $this->playerTeam[$p->getName()]->getLeader();
+				$leader = $this->getTeam($p)->getLeader();
 				$leader->teleport(new Position($randz, 100, $randx));
-	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
+	 /*Maybe?*/ foreach($this->getTeam($leader)->getTeammates() as $tm){
 	 				$tm = $this->getServer()->getPlayer($tm);
 					$tm->teleport($leader);
 				}
@@ -170,9 +182,10 @@ class Main extends PluginBase implements Listener{
 			}else{
 				$p->teleport(new Position($randz, 100, $randx));
 			}
+			$this->heal($p);
+			$this->kills[$p->getName()] = 0;
 		}
 		$teamSize = $this->teamLimit;
 		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers());
-		$this->heal($p);
 	}	
 }
