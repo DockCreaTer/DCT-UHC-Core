@@ -135,8 +135,8 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function startMatch(){
-		$randx = mt_rand(0, 255);
-		$randz = mt_rand(0, 255);
+		$randx = mt_rand(-255, 255);
+		$randz = mt_rand(-255, 255);
 		$teams = false;
 		$this->setWorld();
 		foreach($this->getServer()->getOnlinePlayers() as $p){
