@@ -150,6 +150,9 @@ class Main extends PluginBase implements Listener{
 				if(!isset($this->playerTeam[$p->getName()])){
 					$p->close("",Main::PREFIX."You were not on a team!");
 				}
+				if(count($this->getServer()->getOnlinePlayers()) === 0){
+					return;
+				}
 				$leader = $this->playerTeam[$p->getName()]->getLeader();
 				$leader->teleport(new Position($randz, 100, $randx));
 	 /*Maybe?*/ foreach($this->playerTeam[$leader->getName()]->getTeammates() as $tm){
@@ -157,6 +160,8 @@ class Main extends PluginBase implements Listener{
 					$tm->teleport($leader);
 				}
 				$teams = true;
+			}else{
+				$p->teleport(new Position($randz, 100, $randx));
 			}
 		}
 		$teamSize = $this->teamLimit;

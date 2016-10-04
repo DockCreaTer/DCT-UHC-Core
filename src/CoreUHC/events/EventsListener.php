@@ -96,7 +96,7 @@ class EventsListener implements Listener{
 				case EntityDamageEvent::CAUSE_FALL:
 					if($cause instanceof EntityDamageEvent){
 						if($cause->getFinalDamage() > 2){
-							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." got their ankle broken!");
+							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." got their ankles broken!");
 							break;
 						}
 					}
