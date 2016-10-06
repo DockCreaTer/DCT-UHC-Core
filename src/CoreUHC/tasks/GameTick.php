@@ -31,11 +31,18 @@ private $plugin;
 	}
 
 	public function onRun($tick){
+		$time = $this->getPlugin()->match->getTime();
+		$this->getPlugin()->match->setTime(($time - 1));
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->getPlugin()->match->getStatus() === Main::GRACE){
-				$time = $this->getPlugin()->match->getTime();
-				$this->getPlugin()->match->setTime(($time - 1));
 				$p->sendTip("Grace ends in: ".gmdate("i:s", $time));
+				if($time === 0){
+					$this->getPlugin()->match->setStatus(Main::PVP);
+					$this->getServer()->broadcastMessage(Main::PREFIX."Grace is now over. PvP is enabled!");
+				}
+			}
+			if($this->getPlugin()->match->getStatus() === Main::PVP){
+				//todo: border
 			}
 		}
 	}

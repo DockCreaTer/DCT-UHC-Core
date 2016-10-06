@@ -75,6 +75,13 @@ class EventsListener implements Listener{
 		$player = $ev->getEntity();
 		$cause = $player->getLastDamageCause();
 		$ev->setDeathMessage(null);
+		if($this->getPlugin()->match->getAlivePlayers() === 1){
+			foreach($this->getPlugin()->match->getPlayers() as $name){
+				$p = $this->getServer()->getPlayer($name);
+				$this->getServer()->broadcastMessage($p->getName()." has won the UHC!");
+				//end match
+			}
+		}
 		if($player instanceof Player){
 			if($ev instanceof EntityDamageByEntityEvent){
 				$this->getPlugin()->removePlayer($player);
