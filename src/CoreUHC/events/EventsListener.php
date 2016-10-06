@@ -49,11 +49,23 @@ class EventsListener implements Listener{
 		return $this->plugin;
 	}
 
+	public function onMove(PlayerMoveEvent $ev){
+		$p = $ev->getPlayer();
+	}
+
+	public function onJoin(PlayerJoinEvent $ev){
+		$p = $ev->getPlayer();
+		$this->getPlugin()->heal($p);
+	}
+
 	public function onHit(EntityDamageEvent $ev){
 		$p = $ev->getEntity();
 		if($ev instanceof EntityDamageByEntityEvent){
 			$damager = $ev->getDamager();
-			if($this->getPlugin()->getTeam($damager)->getName() === $this->getPlugin()->getTeam($p)->getName()){
+			if($this->getPlugin()->teamsEnabled() && $this->getPlugin()->getTeam($damager)->getName() === $this->getPlugin()->getTeam($p)->getName()){
+				$ev->setCancelled();
+			}
+			if($this->getPlugin()->match->getStatus() === Main::GRACE){
 				$ev->setCancelled();
 			}
 		}

@@ -13,16 +13,27 @@ use pocketmine\level\Position;
 
 use pocketmine\Player;
 
+use pocketmine\entity\Effect;
+
 use CoreUHC\events\TeamManager;
 use CoreUHC\events\EventsListener;
 use CoreUHC\events\MatchManager;
 use CoreUHC\commands\CoreUHCTeamCommand;
 use CoreUHC\commands\CoreUHCMainCommand;
+use CoreUHC\tasks\GameTick;
 
 class Main extends PluginBase implements Listener{
 
 	const PREFIX = TF::GRAY."[".TF::AQUA."CoreUHC".TF::GRAY."]" . TF::WHITE;
 	const WORLD = "UHC-world";
+
+	const GRACE = 0;
+	const WAITING = 1;
+	const PVP = 2;
+	const ENDED = 3;
+
+	const GRACE_TIME = 1200;//Will change
+	const PVP_TIME = 1800;//Will change
 
 	public $teams = [];
 
@@ -37,6 +48,8 @@ class Main extends PluginBase implements Listener{
 	public $waiting = [];
 
 	public $teamLimit = 2;// changeable soon(scenarios)
+
+	public $time = 0;
 
 	public function onEnable(){
 		@mkdir($this->getDataFolder());
@@ -131,9 +144,10 @@ class Main extends PluginBase implements Listener{
 		$this->teamCount--;
 	}
 
-	public function newMatch($teams = false, $teamSize = 0, array $players){
-		$this->match = new MatchManager($this, $teams, $teamSize, $players);// Soon: scenarios!
+	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME){
+		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time);// Soon: scenarios!
 		$this->getLogger()->info("[Debug]Created match: ".$this->match->getId()."!");
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new GameTick($this), 20);
 	}
 
 	public function removePlayer(Player $player){
@@ -157,6 +171,12 @@ class Main extends PluginBase implements Listener{
 		$this->kills[$player->getName()]++;
 	}
 
+	public function giveEffects(Player $p){
+		$effect = Effect::getEffect(Effect::DAMAGE_RESISTANCE);
+		$effect->setDuration(20*45);
+		$effect->setAmplifier(10);
+		$p->addEffect($effect);
+	}
 	public function startMatch(){
 		$randx = mt_rand(-255, 255);
 		$randz = mt_rand(-255, 255);
@@ -167,7 +187,11 @@ class Main extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
 				return;
 			}
-			$p->setLevel($this->level);
+			$p->teleport($this->level->getSpawn());
+			$p->teleport($p->add(0, $p->getLevel()->getHighestBlockAt($p->getX(), $p->getZ()) + 1));
+			$this->level->generateChunk($p->x, $p->z);
+			$this->heal($p);
+			$this->giveEffects($p);
 			if($this->teamsEnabled()){
 				if(!isset($this->playerTeam[$p->getName()])){
 					$p->close(" ",Main::PREFIX."You were not on a team!");
@@ -182,10 +206,10 @@ class Main extends PluginBase implements Listener{
 			}else{
 				$p->teleport(new Position($randz, 100, $randx));
 			}
-			$this->heal($p);
 			$this->kills[$p->getName()] = 0;
 		}
 		$teamSize = $this->teamLimit;
-		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers());
+		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers(), self::GRACE, self::GRACE_TIME);
+		$this->getServer()->broadcastMessage(self::PREFIX."The UHC match has started!");
 	}	
 }
