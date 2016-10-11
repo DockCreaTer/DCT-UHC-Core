@@ -20,6 +20,8 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityRegainHealthEvent;
 
+use pocketmine\math\Vector3;
+
 use pocketmine\item\Item;
 
 use pocketmine\block\Block;

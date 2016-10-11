@@ -18,6 +18,7 @@ use pocketmine\entity\Effect;
 use CoreUHC\events\TeamManager;
 use CoreUHC\events\EventsListener;
 use CoreUHC\events\MatchManager;
+use CoreUHC\events\BorderListener;
 use CoreUHC\commands\CoreUHCTeamCommand;
 use CoreUHC\commands\CoreUHCMainCommand;
 use CoreUHC\tasks\GameTick;
@@ -35,6 +36,8 @@ class Main extends PluginBase implements Listener{
 
 	const GRACE_TIME = 1200;//Will change
 	const PVP_TIME = 1800;//Will change
+
+	const BORDER = 1000;
 
 	public $teams = [];
 
@@ -63,8 +66,9 @@ class Main extends PluginBase implements Listener{
 		$this->registerCommands();
 		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
 		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");	
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new HeartBeatTask($this), 20);	
-		$this->getServer()->getLogger()->info(self::PREFIX."has been Enabled!");
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new HeartBeatTask($this), 20);
+		$this->border = null;	
+		$this->getServer()->getLogger()->info(self::PREFIX."Plugin has been enabled!");
 		/*if(!$this->getServer()->isLevelGenerated($this->level)){
 			$this->getServer()->generateLevel($this->level, rand(50,10000), \pocketmine\level\generator\Generator::getGeneratorName(\pocketmine\level\generator\Generator::getGenerator("Default")), []);
 			$this->getServer()->loadLevel($this->level);
@@ -171,6 +175,7 @@ class Main extends PluginBase implements Listener{
 	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME){
 		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time);// Soon: scenarios!
 		$this->createTask();
+		$this->border = new BorderListener($this->level->getSpawnLocation()->getX(), $this->level->getSpawnLocation()->getZ(), self::BORDER);
 	}
 
 	public function removePlayer(Player $player){
