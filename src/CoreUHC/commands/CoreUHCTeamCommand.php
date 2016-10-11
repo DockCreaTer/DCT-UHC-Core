@@ -18,7 +18,7 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 		$this->plugin = $plugin;
 		$this->server = $this->plugin->getServer();
 		parent::__construct($plugin, "team", "CoreUHC Team command!", "/team", "t");
-        $this->setPermission("coreuhc.command.team");
+		$this->setPermission("coreuhc.command.team");
     }
 	
 	public function getPlugin(){
