@@ -172,7 +172,7 @@ class Main extends PluginBase implements Listener{
     	unset($this->task);
 	}
 
-	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME){
+	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME, $border = self::BORDER){
 		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time);// Soon: scenarios!
 		$this->createTask();
 		$this->border = new BorderListener($this->level->getSpawnLocation()->getX(), $this->level->getSpawnLocation()->getZ(), self::BORDER);
@@ -252,7 +252,7 @@ class Main extends PluginBase implements Listener{
 			$this->getServer()->setConfigBool("white-list", true);
 		}
 		$teamSize = $this->teamLimit;
-		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers(), self::GRACE, self::GRACE_TIME);
+		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers(), self::GRACE, self::GRACE_TIME, self::BORDER);
 		$this->getServer()->broadcastMessage(self::PREFIX."The UHC match has started!");
 	}	
 }

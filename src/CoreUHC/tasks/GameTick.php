@@ -44,6 +44,26 @@ private $plugin;
 			}
 			if($this->getPlugin()->match->getStatus() === Main::PVP){
 				$p->sendTip(Main::PREFIX.TF::GOLD."Match ends in: ".TF::AQUA.$this->getPlugin()->seconds2string($time).TF::GOLD." Players left: ".TF::AQUA.$this->getPlugin()->match->getAlivePlayers().TF::GOLD." X: ".TF::AQUA.round($p->x).TF::GOLD." Y: ".TF::AQUA.round($p->y).TF::GOLD." Z: ".TF::AQUA.round($p->z));
+				switch($time){
+					case 1500:
+					$this->getPlugin()->match->setBorder(($this->getPlugin()->match->getBorder() - 200));
+					break;
+					case 1200:
+					$this->getPlugin()->match->setBorder(($this->getPlugin()->match->getBorder() - 200));
+					break;
+					case 900:
+					$this->getPlugin()->match->setBorder(($this->getPlugin()->match->getBorder() - 200));
+					break;
+					case 600:
+					$this->getPlugin()->match->setBorder(($this->getPlugin()->match->getBorder() - 200));
+					break;
+					case 300:
+					$this->getPlugin()->match->setBorder(($this->getPlugin()->match->getBorder() - 200));
+					break;
+					case 90:
+					$this->getPlugin()->match->setBorder(25);
+					break;
+				}
 				if($time <= 5 && $time > 0){
 					$this->getServer()->broadcastMessage(Main::PREFIX.TF::GOLD."Match ending in ".TF::AQUA.$time);
 				}

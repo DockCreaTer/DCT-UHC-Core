@@ -8,7 +8,7 @@ use CoreUHC\Main;
 
 class MatchManager{
 
-	public function __construct(Main $plugin, bool $teams, int $teamSize, array $players, int $status, int $time){
+	public function __construct(Main $plugin, bool $teams, int $teamSize, array $players, int $status, int $time, int $border){
 		$this->plugin = $plugin;
 		$this->teams = $teams;
 		$this->players = $players;
@@ -16,6 +16,7 @@ class MatchManager{
 		$this->teamSize = $teamSize;
 		$this->status = $status;
 		$this->time = $time;
+		$this->border = $border;
 	}
 
 	public function getPlugin(){
@@ -67,5 +68,13 @@ class MatchManager{
 
 	public function setTime(int $time){
 		$this->time = $time;
+	}
+
+	public fucntion getBorder(){
+		return $this->border;
+	}
+
+	public function setBorder(int $int){
+		$this->border = $int;
 	}
 }
