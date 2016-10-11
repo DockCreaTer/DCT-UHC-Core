@@ -79,7 +79,11 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function getTeam(Player $player){
-		return $this->playerTeam[$player->getName()];
+		if(isset($this->playerTeam[$player->getName()])){
+			return $this->playerTeam[$player->getName()];
+		}else{
+			return;
+		}
 	}
 
 	public function isInTeam(Player $player){
@@ -171,6 +175,7 @@ class Main extends PluginBase implements Listener{
 
 	public function removePlayer(Player $player){
 		if($this->match === null) return;
+		if(!$player->isOnline()) return;
 		if($this->teamsEnabled()){
 			unset($this->playerTeam[$player->getName()]);
 			$this->getTeam($player)->removePlayer($player);
@@ -204,6 +209,7 @@ class Main extends PluginBase implements Listener{
     }
 
     public function endMatch(){
+    	$this->getServer()->setConfigBool("white-list", false);
     	$this->getServer()->shutdown();
     }
 
@@ -237,6 +243,8 @@ class Main extends PluginBase implements Listener{
 				$p->teleport(new Position($randz, 100, $randx));
 			}
 			$this->kills[$p->getName()] = 0;
+			$this->getServer()->addWhitelist($p->getName());
+			$this->getServer()->setConfigBool("white-list", true);
 		}
 		$teamSize = $this->teamLimit;
 		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers(), self::GRACE, self::GRACE_TIME);

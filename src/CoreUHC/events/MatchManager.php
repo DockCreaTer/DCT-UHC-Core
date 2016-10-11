@@ -37,6 +37,7 @@ class MatchManager{
 	public function removePlayer(Player $player){
 		$key = array_search($player->getName(), $this->players);
 		unset($this->players[$key]);
+		$this->getPlugin()->getServer()->removeWhitelist($player->getName());
 		$player->close(" ",Main::PREFIX."You were eliminated!");
 	}
 

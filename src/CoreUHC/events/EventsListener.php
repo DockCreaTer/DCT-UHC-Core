@@ -59,6 +59,11 @@ class EventsListener implements Listener{
 		$this->getPlugin()->heal($p);
 	}
 
+	public function onQuit(PlayerQuitEvent $ev){
+		$p = $ev->getPlayer();
+		$this->getPlugin()->removePlayer($p);
+	}
+
 	public function onHit(EntityDamageEvent $ev){
 		$p = $ev->getEntity();
 		if($ev instanceof EntityDamageByEntityEvent){

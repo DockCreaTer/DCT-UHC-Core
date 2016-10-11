@@ -35,6 +35,22 @@ class CoreUHCTeamCommand extends CoreUHCCommandListener{
 			$sender->sendMessage(Main::PREFIX."Teams are not enabled!");
 			return;
 		}
+		if(isset($args[0]) && strtolower($args[0]) === "tp"){
+			if(isset($args[1])){
+				$player = $this->getServer()->getPlayer($args[1]);
+				if($player === null){
+					$sender->sendMessage(Main::PREFIX."That player isn't online!");
+					return;
+				} 
+				if($this->getPlugin()->getTeam($player)->getName() === $this->getPlugin()->getTeam($player)->getName()){
+					$sender->teleport($player);
+					$sender->sendMessage(Main::PREFIX."Teleporting to teammate ".$player->getName()."!");
+					$player->sendMessage(Main::PREFIX.$sender->getName()." telported to you!");
+				}else{
+					$sender->sendMessage(Main::PREFIX.$player->getName()." isn't on your team!");
+				}
+			}
+		}
 		if(isset($args[0]) && strtolower($args[0]) === "disband"){
 			if($this->getPlugin()->isInTeam($sender) && $this->getPlugin()->getTeam($sender)->getLeader()->getName() === $sender->getName()){
 				$sender->sendMessage(Main::PREFIX."Team disbaned!");
