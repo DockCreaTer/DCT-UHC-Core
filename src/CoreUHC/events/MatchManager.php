@@ -56,7 +56,7 @@ class MatchManager{
 		return $this->status;
 	}
 
-	public function setStatus(int $status){
+	public function setStatus($status){
 		$this->status = $status;
 	}
 

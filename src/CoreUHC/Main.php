@@ -21,6 +21,7 @@ use CoreUHC\events\MatchManager;
 use CoreUHC\commands\CoreUHCTeamCommand;
 use CoreUHC\commands\CoreUHCMainCommand;
 use CoreUHC\tasks\GameTick;
+use CoreUHC\tasks\HeartBeatTask;
 
 class Main extends PluginBase implements Listener{
 
@@ -51,6 +52,8 @@ class Main extends PluginBase implements Listener{
 
 	public $time = 0;
 
+	public $task = null;
+
 	public function onEnable(){
 		@mkdir($this->getDataFolder());
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false, "team-size" => 2]);
@@ -59,8 +62,13 @@ class Main extends PluginBase implements Listener{
 		$this->commands = [new CoreUHCTeamCommand($this), new CoreUHCMainCommand($this)];
 		$this->registerCommands();
 		$this->getServer()->getPluginManager()->registerEvents(new EventsListener($this), $this);
-		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");		
+		if($this->teamsEnabled()) $this->teamLimit = $this->config->get("team-size");	
+		$this->getServer()->getScheduler()->scheduleRepeatingTask(new HeartBeatTask($this), 20);	
 		$this->getServer()->getLogger()->info(self::PREFIX."has been Enabled!");
+		/*if(!$this->getServer()->isLevelGenerated($this->level)){
+			$this->getServer()->generateLevel($this->level, rand(50,10000), \pocketmine\level\generator\Generator::getGeneratorName(\pocketmine\level\generator\Generator::getGenerator("Default")), []);
+			$this->getServer()->loadLevel($this->level);
+		}*/
 	}
 
 	public function registerCommands(){
@@ -77,7 +85,7 @@ class Main extends PluginBase implements Listener{
 	public function isInTeam(Player $player){
 		if(isset($this->playerTeam[$player->getName()])){
 			return true;
-		} else {
+		}else{
 			return false;
 		}
 	}
@@ -144,10 +152,21 @@ class Main extends PluginBase implements Listener{
 		$this->teamCount--;
 	}
 
+	public function createTask(){
+    	$task = new GameTick($this);
+   	 	$h = $this->getServer()->getScheduler()->scheduleRepeatingTask($task, 20);
+    	$task->setHandler($h);
+    	$this->task = $task->getTaskId();
+	}
+
+	public function cancelTask(){
+    	$this->getServer()->getScheduler()->cancelTask($this->task);
+    	unset($this->task);
+	}
+
 	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME){
 		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time);// Soon: scenarios!
-		$this->getLogger()->info("[Debug]Created match: ".$this->match->getId()."!");
-		$this->getServer()->getScheduler()->scheduleRepeatingTask(new GameTick($this), 20);
+		$this->createTask();
 	}
 
 	public function removePlayer(Player $player){
@@ -177,6 +196,17 @@ class Main extends PluginBase implements Listener{
 		$effect->setAmplifier(10);
 		$p->addEffect($effect);
 	}
+
+	public function seconds2string($int){
+    	$m = floor($int / 60);
+    	$s = floor($int % 60);
+    	return (($m < 10 ? "0" : "") . $m . ":" . ($s < 10 ? "0" : "") . $s);
+    }
+
+    public function endMatch(){
+    	$this->getServer()->shutdown();
+    }
+
 	public function startMatch(){
 		$randx = mt_rand(-255, 255);
 		$randz = mt_rand(-255, 255);

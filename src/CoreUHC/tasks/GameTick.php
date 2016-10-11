@@ -35,12 +35,18 @@ private $plugin;
 		$this->getPlugin()->match->setTime(($time - 1));
 		foreach($this->getServer()->getOnlinePlayers() as $p){
 			if($this->getPlugin()->match->getStatus() === Main::GRACE){
+				$p->sendTip(Main::PREFIX.TF::GOLD."Grace ends in: ".TF::AQUA.$this->getPlugin()->seconds2string($time).TF::GOLD." Players left: ".TF::AQUA.$this->getPlugin()->match->getAlivePlayers().TF::GOLD." X: ".TF::AQUA.round($p->x).TF::GOLD." Y: ".TF::AQUA.round($p->y).TF::GOLD." Z: ".TF::AQUA.round($p->z));
 				if($time === 0){
+					$this->getPlugin()->match->setTime(Main::PVP_TIME);
 					$this->getPlugin()->match->setStatus(Main::PVP);
 					$this->getServer()->broadcastMessage(Main::PREFIX."Grace is now over. PvP is enabled!");
 				}
 			}
 			if($this->getPlugin()->match->getStatus() === Main::PVP){
+				$p->sendTip(Main::PREFIX.TF::GOLD."Match ends in: ".TF::AQUA.$this->getPlugin()->seconds2string($time).TF::GOLD." Players left: ".TF::AQUA.$this->getPlugin()->match->getAlivePlayers().TF::GOLD." X: ".TF::AQUA.round($p->x).TF::GOLD." Y: ".TF::AQUA.round($p->y).TF::GOLD." Z: ".TF::AQUA.round($p->z));
+				if($time === 1 && $time > 0){
+					$this->getPlugin()->endMatch();
+				}
 			}
 		}
 	}

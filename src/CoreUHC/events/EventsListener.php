@@ -51,6 +51,7 @@ class EventsListener implements Listener{
 
 	public function onMove(PlayerMoveEvent $ev){
 		$p = $ev->getPlayer();
+		$p->getLevel()->generateChunk($p->x, $p->z);
 	}
 
 	public function onJoin(PlayerJoinEvent $ev){
@@ -119,10 +120,10 @@ class EventsListener implements Listener{
 					}
 					break;
 				case EntityDamageEvent::CAUSE_SUICIDE:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed themselves!");;
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed theirself!");;
 					break;
 				case EntityDamageEvent::CAUSE_VOID:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world! ELIMINATED!");
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world!");
 					break;
 				case EntityDamageEvent::CAUSE_FALL:
 					if($cause instanceof EntityDamageEvent){
