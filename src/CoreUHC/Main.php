@@ -34,8 +34,8 @@ class Main extends PluginBase implements Listener{
 	const PVP = 2;
 	const ENDED = 3;
 
-	const GRACE_TIME = 1200;//Will change
-	const PVP_TIME = 1800;//Will change
+	const GRACE_TIME = 20;//Will change
+	const PVP_TIME = 95;//Will change
 
 	const BORDER = 1000;
 
@@ -173,7 +173,7 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function newMatch($teams = false, $teamSize = 0, array $players, $status = self::GRACE, $time = self::GRACE_TIME, $border = self::BORDER){
-		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time);// Soon: scenarios!
+		$this->match = new MatchManager($this, $teams, $teamSize, $players, $status, $time, $border);// Soon: scenarios!
 		$this->createTask();
 		$this->border = new BorderListener($this->level->getSpawnLocation()->getX(), $this->level->getSpawnLocation()->getZ(), self::BORDER);
 	}

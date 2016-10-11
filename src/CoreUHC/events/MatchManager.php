@@ -70,11 +70,14 @@ class MatchManager{
 		$this->time = $time;
 	}
 
-	public fucntion getBorder(){
+	public function getBorder(){
 		return $this->border;
 	}
 
 	public function setBorder(int $int){
 		$this->border = $int;
+		$x = $this->getPlugin()->level->getSpawnLocation()->getX();
+		$z = $this->getPlugin()->level->getSpawnLocation()->getZ();
+		$this->getPlugin()->border->changeBorder($x, $z, $int);
 	}
 }

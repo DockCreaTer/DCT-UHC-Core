@@ -77,6 +77,19 @@ class BorderListener{
         $this->minZ = $this->z - $radius;
     }
 
+    public function changeBorder($x, $z, $radius){
+        $this->x = $x;
+        $this->z = $z;
+
+        $this->maxX = $x + $radius;
+        $this->minX = $x - $radius;
+
+        $this->maxZ = $z + $radius;
+        $this->minZ = $z - $radius;
+
+        $this->radius = $radius;
+    }
+
     public function insideBorder($x, $z){
         return !($x < $this->minX or $x > $this->maxX or $z < $this->minZ or $z > $this->maxZ);
     }
