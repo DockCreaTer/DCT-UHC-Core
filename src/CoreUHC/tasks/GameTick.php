@@ -44,6 +44,9 @@ private $plugin;
 			}
 			if($this->getPlugin()->match->getStatus() === Main::PVP){
 				$p->sendTip(Main::PREFIX.TF::GOLD."Match ends in: ".TF::AQUA.$this->getPlugin()->seconds2string($time).TF::GOLD." Players left: ".TF::AQUA.$this->getPlugin()->match->getAlivePlayers().TF::GOLD." X: ".TF::AQUA.round($p->x).TF::GOLD." Y: ".TF::AQUA.round($p->y).TF::GOLD." Z: ".TF::AQUA.round($p->z));
+				if($time <= 5 && $time > 0){
+					$this->getServer()->broadcastMessage(Main::PREFIX.TF::GOLD."Match ending in ".TF::AQUA.$time);
+				}
 				if($time === 1 && $time > 0){
 					$this->getPlugin()->endMatch();
 				}
