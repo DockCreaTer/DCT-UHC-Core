@@ -34,8 +34,8 @@ class Main extends PluginBase implements Listener{
 	const PVP = 2;
 	const ENDED = 3;
 
-	const GRACE_TIME = 20;//Will change
-	const PVP_TIME = 95;//Will change
+	const GRACE_TIME = 1200;//Will change
+	const PVP_TIME = 1800;//Will change
 
 	const BORDER = 1000;
 

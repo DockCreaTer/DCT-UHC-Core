@@ -96,7 +96,7 @@ class BorderListener{
 
     public function correctPosition($location){
 
-        $knockback = 3.0;
+        $knockback = 2.0;
 
         $x = $location->getX();
         $z = $location->getZ();
@@ -118,7 +118,10 @@ class BorderListener{
 
         $y = $this->findSafeY($location->getLevel(), $x, $y, $z);
 
-        return new Location($x, $y, $z, $location->getYaw(), $location->getPitch());
+        if($y < 10){
+            $y =  70;
+        }
+        return new \pocketmine\math\Vector3($x, $y, $z);
     }
 
     private function findSafeY(Level $level, $x, $y, $z){

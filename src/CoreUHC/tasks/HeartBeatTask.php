@@ -34,10 +34,12 @@ private $plugin;
 
 	public function onRun($tick){
 		foreach($this->getServer()->getOnlinePlayers() as $p){
-			 if($this->getPlugin()->border->insideBorder($p->getX(), $p->getZ())) continue;
+			if($this->border !== null){
+				if($this->getPlugin()->border->insideBorder($p->getX(), $p->getZ())) continue;
             	$location = $this->getPlugin()->border->correctPosition($p->getLocation());
             	$p->teleport(new Vector3($location->getX(), $location->getY(), $location->getZ()));
            		$p->sendMessage(Main::PREFIX."You have reached the border!");
+			}
         }
 		if($this->getPlugin()->match === null){
 			foreach($this->getServer()->getOnlinePlayers() as $p){
