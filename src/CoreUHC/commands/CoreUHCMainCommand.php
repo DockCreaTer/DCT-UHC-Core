@@ -31,7 +31,17 @@ class CoreUHCMainCommand extends CoreUHCCommandListener{
 	
 	public function execute(CommandSender $sender, $commandLabel, array $args){
 		if(isset($args[0]) && strtolower($args[0]) === "start"){
+			if($this->getPlugin()->match !== null){
+				$sender->sendMessage(Main::PREFIX."The match has already started!");
+				return;
+			}
 			$this->getPlugin()->startMatch();
+			$sender->sendMessage(Main::PREFIX."Starting match!");
+		}
+
+		if(isset($args[0]) && strtolower($args[0]) === "stop"){
+			$this->getPlugin()->endMatch();
+			$sender->sendMessage(Main::PREFIX."Stopping match!");
 		}
 	}
 }

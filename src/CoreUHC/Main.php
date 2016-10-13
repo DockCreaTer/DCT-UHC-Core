@@ -218,6 +218,7 @@ class Main extends PluginBase implements Listener{
     }
 
     public function endMatch(){
+    	/* maybe a task? */
     	$this->getServer()->setConfigBool("white-list", false);
     	$this->getServer()->shutdown();
     }

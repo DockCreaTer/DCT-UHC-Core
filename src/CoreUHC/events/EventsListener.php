@@ -53,7 +53,8 @@ class EventsListener implements Listener{
 
 	public function onMove(PlayerMoveEvent $ev){
 		$p = $ev->getPlayer();
-		$p->getLevel()->generateChunk($p->x, $p->z);
+		$p->getLevel()->loadChunk($p->x, $p->z /*$p*/);
+		$p->getLevel()->requestChunk($p->x, $p->z, $p);
 	}
 
 	public function onJoin(PlayerJoinEvent $ev){
