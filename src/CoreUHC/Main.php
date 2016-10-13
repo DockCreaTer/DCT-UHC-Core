@@ -75,6 +75,10 @@ class Main extends PluginBase implements Listener{
 		}*/
 	}
 
+	public function onDisable(){
+		$this->getServer()->setConfigBool("white-list", false);
+	}
+
 	public function registerCommands(){
 		if(count($this->commands) === 0){
 			return;

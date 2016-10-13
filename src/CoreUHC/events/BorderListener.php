@@ -121,6 +121,11 @@ class BorderListener{
         if($y < 10){
             $y =  70;
         }
+        if($this->radius === 25){
+            $x = $location->getLevel()->getSpawnLocation()->getX();
+            $y = $location->getLevel()->getSpawnLocation()->getY();
+            $z = $location->getLevel()->getSpawnLocation()->getZ();
+        }
         return new \pocketmine\math\Vector3($x, $y, $z);
     }
 

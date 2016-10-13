@@ -44,6 +44,7 @@ private $plugin;
 		if($this->getPlugin()->match === null){
 			foreach($this->getServer()->getOnlinePlayers() as $p){
 				$p->sendTip(Main::PREFIX.TF::GOLD."The match will start soon. Players online: ".TF::AQUA.count($this->getServer()->getOnlinePlayers()).TF::WHITE."/".TF::AQUA.$this->getServer()->getMaxPlayers());
+				if($p->getFood() !== 20) $p->setFood(20);
 			}
 		}
 	}

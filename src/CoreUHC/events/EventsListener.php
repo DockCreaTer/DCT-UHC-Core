@@ -66,6 +66,28 @@ class EventsListener implements Listener{
 		$this->getPlugin()->removePlayer($p);
 	}
 
+	public function onHeal(EntityRegainHealthEvent $ev){
+		if($ev->getRegainReason() === EntityRegainHealthEvent::CAUSE_REGEN){
+			$ev->setCancelled();
+		}
+		if($ev->getRegainReason() === EntityRegainHealthEvent::CAUSE_EATING){
+			$ev->setCancelled();
+		}
+		if($ev->getRegainReason() === EntityRegainHealthEvent::CAUSE_SATURATION){
+			$ev->setCancelled();
+		}
+	}
+	
+	public function onEat(PlayerItemConsumeEvent $ev){
+		$item = $ev->getItem();
+		$p = $ev->getPlayer();
+		if($item instanceof \pocketmine\item\Food){
+			$p->setFood($p->getFood() + $item->getFoodRestore());
+		}else{
+			$p->setFood($p->getFood() + 1);
+		}
+	}
+
 	public function onHit(EntityDamageEvent $ev){
 		$p = $ev->getEntity();
 		if($ev instanceof EntityDamageByEntityEvent){
@@ -84,10 +106,9 @@ class EventsListener implements Listener{
 		$cause = $player->getLastDamageCause();
 		$ev->setDeathMessage(null);
 		if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1){
-			foreach($this->getPlugin()->match->getPlayers() as $name){
-				$p = $this->getServer()->getPlayer($name);
-				$this->getServer()->broadcastMessage($p->getName()." has won the UHC!");
-				//end match
+			foreach($this->getServer()->getOnlinePlayers() as $p){
+				$p->sendMessage(Main::PREFIX.$player->getName()." won the match!");
+				//$player->setGamemode(Player::SPECTATOR);
 			}
 		}
 		if($player instanceof Player){
@@ -127,7 +148,7 @@ class EventsListener implements Listener{
 					}
 					break;
 				case EntityDamageEvent::CAUSE_SUICIDE:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed theirself!");;
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." killed theirself!");
 					break;
 				case EntityDamageEvent::CAUSE_VOID:
 					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." fell through the world!");
@@ -147,7 +168,7 @@ class EventsListener implements Listener{
 					break;
 
 				case EntityDamageEvent::CAUSE_LAVA:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to LAVA!");
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to lava!");
 					break;
 
 				case EntityDamageEvent::CAUSE_FIRE:
@@ -159,13 +180,13 @@ class EventsListener implements Listener{
 					break;
 
 				case EntityDamageEvent::CAUSE_DROWNING:
-					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." couldn't swim, so they died!");
+					$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." couldn't swim!");
 					break;
 
 				case EntityDamageEvent::CAUSE_CONTACT:
 					if($cause instanceof EntityDamageByBlockEvent){
 						if($cause->getDamager()->getId() === Block::CACTUS){
-							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to cacti!");
+							$this->getServer()->broadcastMessage(Main::PREFIX.$player->getName()." died due to prickly cactus!");
 						}
 					}
 					break;
