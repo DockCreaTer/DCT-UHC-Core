@@ -219,7 +219,11 @@ class Main extends PluginBase implements Listener{
 	public function seconds2string($int){
     	$m = floor($int / 60);
     	$s = floor($int % 60);
-    	return (($m < 10 ? "0" : "") . $m . ":" . ($s < 10 ? "0" : "") . $s);
+    	if($m <= 0 && $s <= 0){
+    		return 0;
+    	}else{
+    		return (($m < 10 ? "0" : "") . $m . ":" . ($s < 10 ? "0" : "") . $s);
+    	}
     }
 
     public function endMatch(){
