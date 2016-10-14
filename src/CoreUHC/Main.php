@@ -29,10 +29,10 @@ class Main extends PluginBase implements Listener{
 	const PREFIX = TF::GRAY."[".TF::AQUA."CoreUHC".TF::GRAY."]" . TF::WHITE;
 	const WORLD = "UHC-world";
 
-	const GRACE = 0;
-	const WAITING = 1;
-	const PVP = 2;
-	const ENDED = 3;
+	const GRACE = "Grace";
+	const WAITING = "Waiting...";
+	const PVP = "PvP";
+	const ENDED = "Ended";
 
 	const GRACE_TIME = 1200;//Will change
 	const PVP_TIME = 1800;//Will change
@@ -57,6 +57,10 @@ class Main extends PluginBase implements Listener{
 
 	public $task = null;
 
+	public $whitelist = [];
+
+	public $queue = [];
+
 	public function onEnable(){
 		@mkdir($this->getDataFolder());
 		$this->config = new Config($this->getDataFolder(). "config.yml", Config::YAML, ["UHC-world" => "UHC", "Team-enabled" => false, "team-size" => 2]);
@@ -76,7 +80,7 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function onDisable(){
-		$this->getServer()->setConfigBool("white-list", false);
+		
 	}
 
 	public function registerCommands(){
@@ -148,6 +152,7 @@ class Main extends PluginBase implements Listener{
 	}
 
 	public function heal(Player $player){
+		if(!$player->isOnline()) return;
 		$player->setMaxHealth($player->getMaxHealth());
 		$player->setHealth($player->getMaxHealth());
 		$player->setFood(20);
@@ -219,7 +224,6 @@ class Main extends PluginBase implements Listener{
 
     public function endMatch(){
     	/* maybe a task? */
-    	$this->getServer()->setConfigBool("white-list", false);
     	$this->getServer()->shutdown();
     }
 
@@ -253,8 +257,7 @@ class Main extends PluginBase implements Listener{
 				$p->teleport(new Position($randz, 100, $randx));
 			}
 			$this->kills[$p->getName()] = 0;
-			$this->getServer()->addWhitelist($p->getName());
-			$this->getServer()->setConfigBool("white-list", true);
+			$this->whitelist[$p->getName()] = $p->getName();
 		}
 		$teamSize = $this->teamLimit;
 		$this->newMatch($teams, $teamSize, $this->getServer()->getOnlinePlayers(), self::GRACE, self::GRACE_TIME, self::BORDER);

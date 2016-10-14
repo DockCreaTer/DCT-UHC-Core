@@ -37,8 +37,10 @@ private $plugin;
 			if($this->getPlugin()->border !== null && $p->getLevel()->getName() === $this->getPlugin()->level->getName()){
 				if($this->getPlugin()->border->insideBorder($p->getX(), $p->getZ())) continue;
             	$location = $this->getPlugin()->border->correctPosition($p->getLocation());
-            	$p->teleport($location);
-           		$p->sendMessage(Main::PREFIX."You have reached the border!");
+            	if($p->getGamemode() === Player::SURVIVAL){
+            		$p->teleport($location);
+            		$p->sendMessage(Main::PREFIX."You have reached the border!");
+            	}
 			}
         }
 		if($this->getPlugin()->match === null){

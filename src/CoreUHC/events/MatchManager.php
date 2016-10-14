@@ -8,7 +8,7 @@ use CoreUHC\Main;
 
 class MatchManager{
 
-	public function __construct(Main $plugin, bool $teams, int $teamSize, array $players, int $status, int $time, int $border){
+	public function __construct(Main $plugin, bool $teams, int $teamSize, array $players, $status, int $time, int $border){
 		$this->plugin = $plugin;
 		$this->teams = $teams;
 		$this->players = $players;
@@ -44,6 +44,15 @@ class MatchManager{
 
 	public function addPlayer(Player $player){
 		array_push($this->players, $player->getName());
+	}
+
+	public function isInMatch(Player $player){
+		$key = array_search($player->getName(), $this->players);
+		if(isset($this->players[$key])){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public function getAlivePlayers(){

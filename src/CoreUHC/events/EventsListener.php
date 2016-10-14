@@ -57,14 +57,23 @@ class EventsListener implements Listener{
 		$p->getLevel()->requestChunk($p->x, $p->z, $p);
 	}
 
+		$p = $ev->getPlayer();
+		if($this->getPlugin()->match !== null && !$p->isOp() && !isset($this->getPlugin()->whitelist[$p->getName()])){
+			$ev->setCancelled();
+			$ev->setKickMessage(Main::PREFIX.TF::GOLD."Match is already running. There is ".$this->getPlugin()->seconds2string($this->getPlugin()->match->getTime())." left in the ".$this->getPlugin()->match->getStatus()." stage!");
+		}
+	}
+
 	public function onJoin(PlayerJoinEvent $ev){
 		$p = $ev->getPlayer();
-		$this->getPlugin()->heal($p);
+		$ev->setJoinMessage(null);
+		if($this->getPlugin()->match === null) $this->getPlugin()->heal($p);
 	}
 
 	public function onQuit(PlayerQuitEvent $ev){
 		$p = $ev->getPlayer();
-		$this->getPlugin()->removePlayer($p);
+		$ev->setQuitMessage(null);
+		if($this->getPlugin()->match !== null) $this->getPlugin()->queue[$p->getName()] = 300;//todo taskkk
 	}
 
 	public function onHeal(EntityRegainHealthEvent $ev){
@@ -106,18 +115,17 @@ class EventsListener implements Listener{
 		$player = $ev->getEntity();
 		$cause = $player->getLastDamageCause();
 		$ev->setDeathMessage(null);
-		if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1){
-			foreach($this->getServer()->getOnlinePlayers() as $p){
-				$p->sendMessage(Main::PREFIX.$player->getName()." won the match!");
-				//$player->setGamemode(Player::SPECTATOR);
-			}
-		}
 		if($player instanceof Player){
 			if($ev instanceof EntityDamageByEntityEvent){
-				$this->getPlugin()->removePlayer($player);
-				$this->getPlugin()->updateKills($ev->getDamager());
-			}else{
-				$this->getPlugin()->removePlayer($player);
+				if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1 && $this->getPlugin()->match->getStatus() === Main::PVP){
+					foreach($this->getServer()->getOnlinePlayers() as $p){
+						$p->sendMessage(Main::PREFIX.$ev->getDamager()->getName()." won the match!");
+					}
+					$this->getPlugin()->removePlayer($player);
+					$this->getPlugin()->updateKills($ev->getDamager());
+				}else{
+					$this->getPlugin()->removePlayer($player);
+				}
 			}
 		}
 		switch($cause === null ? EntityDamageEvent::CAUSE_CUSTOM : $cause->getCause()){
