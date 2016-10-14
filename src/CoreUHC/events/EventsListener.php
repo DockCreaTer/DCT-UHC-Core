@@ -10,6 +10,7 @@ use pocketmine\Server;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerRespawnEvent;
+use pocketmine\event\player\PlayerPreLoginEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\event\player\PlayerMoveEvent;
@@ -53,10 +54,11 @@ class EventsListener implements Listener{
 
 	public function onMove(PlayerMoveEvent $ev){
 		$p = $ev->getPlayer();
-		$p->getLevel()->loadChunk($p->x, $p->z /*$p*/);
-		$p->getLevel()->requestChunk($p->x, $p->z, $p);
+		$p->getLevel()->loadChunk($p->x, $p->z);
+		//Chunk error in console: $p->getLevel()->requestChunk($p->x, $p->z, $p);
 	}
 
+	public function onPlayerLogin(PlayerPreLoginEvent $ev){
 		$p = $ev->getPlayer();
 		if($this->getPlugin()->match !== null && !$p->isOp() && !isset($this->getPlugin()->whitelist[$p->getName()])){
 			$ev->setCancelled();
