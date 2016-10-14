@@ -67,6 +67,15 @@ class MatchManager{
 		return $this->status;
 	}
 
+	public function getNextStatus(){
+		if($this->status === Main::GRACE){
+			return Main::PVP_TIME;
+		}
+		if($this->status === Main::PVP){
+			return 0;
+		}
+	}
+
 	public function setStatus($status){
 		$this->status = $status;
 	}

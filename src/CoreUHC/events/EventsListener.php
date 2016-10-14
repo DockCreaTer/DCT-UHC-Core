@@ -62,7 +62,7 @@ class EventsListener implements Listener{
 		$p = $ev->getPlayer();
 		if($this->getPlugin()->match !== null && !$p->isOp() && !isset($this->getPlugin()->whitelist[$p->getName()])){
 			$ev->setCancelled();
-			$ev->setKickMessage(Main::PREFIX.TF::GOLD."Match is already running. There is ".$this->getPlugin()->seconds2string($this->getPlugin()->match->getTime())." left in the ".$this->getPlugin()->match->getStatus()." stage!");
+			$ev->setKickMessage(Main::PREFIX.TF::GOLD."Match is already running. There is ".$this->getPlugin()->seconds2string($this->getPlugin()->match->getTime())." mins/secs left in the ".$this->getPlugin()->match->getStatus()." stage!\n Try again in ".$this->getPlugin()->seconds2string(($this->getPlugin()->match->getNextStatus() - $this->getPlugin()->match->getTime()))." mins/secs!");
 		}
 	}
 
