@@ -122,6 +122,10 @@ class Main extends PluginBase implements Listener{
 		$player->sendMessage(self::PREFIX."You are now on team: ".$team);
 	}
 
+	public function getTeamById(int $id){
+		return $this->teams["Team".$id];
+	}
+
 	public function createTeam(Player $creator, string $team){
 		if(isset($this->teams[$team])){
 			$creator->sendMessage(self::PREFIX."This is already a team!");
@@ -241,7 +245,7 @@ class Main extends PluginBase implements Listener{
 				$this->getServer()->broadcastMessage(self::PREFIX."UHC level is not set or loaded! Please load the world/set it to start a match!");
 				return;
 			}
-			$p->teleport($this->level->getSpawn());
+			$p->teleport($this->level->getSpawnLocation());
 			$p->teleport($p->add(0, $p->getLevel()->getHighestBlockAt($p->getX(), $p->getZ()) + 1));
 			$this->level->generateChunk($p->x, $p->z);
 			$this->heal($p);

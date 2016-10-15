@@ -119,7 +119,7 @@ class EventsListener implements Listener{
 		$ev->setDeathMessage(null);
 		if($player instanceof Player){
 			if($ev instanceof EntityDamageByEntityEvent){
-				if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1 && $this->getPlugin()->match->getStatus() === Main::PVP){
+				if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1 && $this->getPlugin()->match->getStatus() === Main::PVP && !$this->getPlugin()->teamsEnabled()){
 					foreach($this->getServer()->getOnlinePlayers() as $p){
 						$p->sendMessage(Main::PREFIX.$ev->getDamager()->getName()." won the match!");
 					}
@@ -127,6 +127,10 @@ class EventsListener implements Listener{
 					$this->getPlugin()->updateKills($ev->getDamager());
 				}else{
 					$this->getPlugin()->removePlayer($player);
+				}
+				if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1 && $this->getPlugin()->match->getStatus() === Main::PVP && $this->getPlugin()->teamsEnabled()){
+					if($this->getPlugin()->teamCount === 1){
+					}
 				}
 			}
 		}
