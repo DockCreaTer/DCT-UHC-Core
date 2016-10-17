@@ -1,5 +1,5 @@
 ### CoreUHC
-A Unique UHC plugin!
+A UHC plugin built for Genisys servers!
 ## Features
 - Teams
 
