@@ -23,6 +23,9 @@ class TeamManager{
 	public function removePlayer(Player $player){
 		$key = array_search($player->getName(), $this->teammates);
 		unset($this->teammates[$key]);
+		if(count($this->teammates) === 0){
+			unset($this->getPlugin()->teams[$this->getName()]);
+		}
 	}
 
 	public function addPlayer(Player $player){

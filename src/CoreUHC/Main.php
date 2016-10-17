@@ -261,6 +261,7 @@ class Main extends PluginBase implements Listener{
 					$tm->teleport($leader);
 				}
 				$teams = true;
+				//echo var_dump($this->teams);
 			}else{
 				$p->teleport(new Position($randz, 100, $randx));
 			}

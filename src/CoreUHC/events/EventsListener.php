@@ -123,6 +123,7 @@ class EventsListener implements Listener{
 					foreach($this->getServer()->getOnlinePlayers() as $p){
 						$p->sendMessage(Main::PREFIX.$ev->getDamager()->getName()." won the match!");
 					}
+				}
 					$this->getPlugin()->removePlayer($player);
 					$this->getPlugin()->updateKills($ev->getDamager());
 				}else{
@@ -130,10 +131,16 @@ class EventsListener implements Listener{
 				}
 				if($this->getPlugin()->match !== null && $this->getPlugin()->match->getAlivePlayers() === 1 && $this->getPlugin()->match->getStatus() === Main::PVP && $this->getPlugin()->teamsEnabled()){
 					if($this->getPlugin()->teamCount === 1){
+						$key = array_keys($this->getPlugin()->teams);
+						$team = $this->getPlugin()->teams[$key[0]];
+						foreach($team->getTeammates() as $tm){
+							$tm = $this->getServer()->getPlayer($tm);
+							// stuf here
+						}
+						$this->getServer()->broadcastMessage($team->getName()." won the match!");
 					}
 				}
 			}
-		}
 		switch($cause === null ? EntityDamageEvent::CAUSE_CUSTOM : $cause->getCause()){
 				case EntityDamageEvent::CAUSE_ENTITY_ATTACK:
 					if($cause instanceof EntityDamageByEntityEvent){

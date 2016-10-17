@@ -22,6 +22,7 @@ private $plugin;
 		parent::__construct($plugin);
 		$this->plugin = $plugin;
 		$this->server = $plugin->getServer();
+		$this->temp = null;
 	}
 
 	public function getPlugin(){
@@ -34,6 +35,12 @@ private $plugin;
 
 	public function onRun($tick){
 		foreach($this->getServer()->getOnlinePlayers() as $p){
+			if($this->getPlugin()->teamsEnabled() && $this->getPlugin()->isInTeam($p)){
+				$team = $this->getPlugin()->getTeam($p);
+				$p->setNameTag(TF::GRAY."[".TF::AQUA.$team->getName().TF::GRAY."]".TF::GOLD.$p->getName()."\n".TF::RESET.TF::RED.$p->getHealth().TF::GRAY."/".TF::RED.$p->getMaxHealth());
+			}else{
+				$p->setNameTag(TF::GOLD.$p->getName()."\n".TF::RESET.TF::RED.$p->getHealth().TF::GRAY."/".TF::RED.$p->getMaxHealth());
+			}
 			if($this->getPlugin()->border !== null && $p->getLevel()->getName() === $this->getPlugin()->level->getName()){
 				if($this->getPlugin()->border->insideBorder($p->getX(), $p->getZ())) continue;
             	$location = $this->getPlugin()->border->correctPosition($p->getLocation());
