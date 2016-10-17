@@ -1,5 +1,5 @@
 name: CoreUHC
 main: CoreUHC\Main
-version: "1.2_ALPHA"
+version: "1.3_ALPHA"
 api: [1.12.0]
 author: SavionLegendZzz
